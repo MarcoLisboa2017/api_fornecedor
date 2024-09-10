@@ -42,3 +42,9 @@ Body Json:
     "estado": "SP",
     "pais": "Brasil"
 }
+
+# Ajustar configuração de DB
+
+class Config:
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://USERNAME:SENHA@NOME BANCO DE DADOS /cliente_fornecedor'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
