@@ -12,8 +12,9 @@ source venv/bin/activate
 
 Dentro da pasta do seu projeto, rode o comando para iniciar o servidor Flask:
 
-export FLASK_APP=app.py
-export FLASK_ENV=development
+*export FLASK_APP=app.py
+
+*export FLASK_ENV=development
 flask run
 
 # Desativar o ambiente virtual
