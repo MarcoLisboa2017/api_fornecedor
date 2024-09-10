@@ -1,9 +1,11 @@
 # api_fornecedor
 
-# Processo de startar o projeto
-python3 -m venv venv
-source venv/bin/activate
-pip install flask flask-mysql flask-sqlalchemy pymysql marshmallow
+# Inicando projeto
+*python3 -m venv venv
+
+*source venv/bin/activate
+
+*pip install flask flask-mysql flask-sqlalchemy pymysql marshmallow
 
 # Iniciar aplicação
 source venv/bin/activate
