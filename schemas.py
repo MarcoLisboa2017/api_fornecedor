@@ -18,7 +18,7 @@ class ContatoSchema(Schema):
 class PessoaSchema(Schema):
     id = fields.Int(dump_only=True)
     tipo = fields.Str(required=True)
-    tipo_pessoa = fields.Str(required=True)
+    tipo_pessoa_id = fields.Integer(required=True)
     categoria = fields.Str()
     nome = fields.Str(required=True)
     data_nascimento = fields.Date()
