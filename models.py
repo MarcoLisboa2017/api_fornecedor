@@ -2,10 +2,29 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+class Tipo(db.Model):
+    __tablename__ = 'tipos'
+
+    id = db.Column(db.Integer, primary_key=True)
+    descricao = db.Column(db.String(50), unique=True, nullable=False)
+
+    # Relação com a tabela Pessoa
+    pessoas = db.relationship('Pessoa', backref='tipo', lazy=True)
+
+class TipoPessoa(db.Model):
+    __tablename__ = 'tipos_pessoa'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    descricao = db.Column(db.String(50), unique=True, nullable=False)
+
+    # Relação com a tabela Pessoa
+    pessoas = db.relationship('Pessoa', backref='tipo_pessoa', lazy=True)
+   
+
 class Pessoa(db.Model):
     __tablename__ = 'pessoas'
     id = db.Column(db.Integer, primary_key=True)
-    tipo = db.Column(db.String(50), nullable=False)  # cliente/fornecedor
+    tipo_id = db.Column(db.Integer, db.ForeignKey('tipos.id'), nullable=False)
     tipo_pessoa_id = db.Column(db.Integer, db.ForeignKey('tipos_pessoa.id'), nullable=False)  # Chave estrangeira
     categoria = db.Column(db.String(100))
     nome = db.Column(db.String(150), nullable=False)
@@ -61,12 +80,3 @@ class Contato(db.Model):
     observacao = db.Column(db.Text)
     pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'), nullable=False)
 
-
-class TipoPessoa(db.Model):
-    __tablename__ = 'tipos_pessoa'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    descricao = db.Column(db.String(50), unique=True, nullable=False)
-
-    # Relação com a tabela Pessoa
-    pessoas = db.relationship('Pessoa', backref='tipo_pessoa', lazy=True)

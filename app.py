@@ -24,13 +24,13 @@ def create_pessoa():
 
     try:
         pessoa_data = pessoa_schema.load(data)
-        pessoa_data['tipo'] = 'cliente'  # Ou ajuste conforme necessário
+        tipo_id = pessoa_data.pop('tipo_id') 
         
         # Remover 'tipo_pessoa_id' de pessoa_data, se existir
         pessoa_data.pop('tipo_pessoa_id', None)
 
         # Criar nova pessoa
-        nova_pessoa = Pessoa(**pessoa_data, tipo_pessoa_id=tipo_pessoa_id)
+        nova_pessoa = Pessoa(tipo_id=tipo_id,**pessoa_data, tipo_pessoa_id=tipo_pessoa_id)
         db.session.add(nova_pessoa)
         db.session.commit()
         
@@ -40,6 +40,22 @@ def create_pessoa():
         return jsonify(err.messages), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# Novo Endpoint GET para listar ou buscar uma pessoa por ID
+@app.route('/fornecedorcliente', methods=['GET'])
+def get_pessoas():
+    pessoa_id = request.args.get('id')
+
+    if pessoa_id:
+        # Buscar pessoa específica por ID
+        pessoa = Pessoa.query.get(pessoa_id)
+        if not pessoa:
+            return jsonify({"message": "Pessoa não encontrada"}), 404
+        return jsonify(pessoa_schema.dump(pessoa)), 200
+    else:
+        # Listar todas as pessoas
+        pessoas = Pessoa.query.all()
+        return jsonify(pessoas_schema.dump(pessoas)), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
