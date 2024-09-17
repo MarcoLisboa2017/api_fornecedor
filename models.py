@@ -135,3 +135,32 @@ class Estoque(db.Model):
     produto_id = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable=False)
     produto = db.relationship('Produto', back_populates='estoque')
 
+class Orcamento(db.Model):
+    __tablename__ = 'orcamentos'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    pessoas_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'), nullable=False)  # Relaciona com a tabela Pessoa
+    vendedor = db.Column(db.String(100), nullable=False)
+    numero_orcamento = db.Column(db.Integer, nullable=False, unique=True)
+    produtos_id = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable=False)
+    quantidade = db.Column(db.Integer, nullable=False)
+    valor_ipi = db.Column(db.Float, nullable=False)
+    valor_icms = db.Column(db.Float, nullable=False)
+    valor_unitario = db.Column(db.Float, nullable=False)
+    valor_total = db.Column(db.Float, nullable=False)
+    valor_frete = db.Column(db.Float, nullable=True)
+    valor_desconto = db.Column(db.Float, nullable=True)
+    preco_bruto = db.Column(db.Float, nullable=False)
+    preco_liquido = db.Column(db.Float, nullable=False)
+    modalidade_frete = db.Column(db.String(50), nullable=False)  # Rodoviario, Aereo, Maritimo
+    transportadora = db.Column(db.String(100), nullable=True)
+    data_orcamento = db.Column(db.Date, nullable=False)
+    prazo_entrega = db.Column(db.String(50), nullable=False)
+    validade = db.Column(db.Date, nullable=True)
+    observacoes = db.Column(db.Text, nullable=True)
+    anexo = db.Column(db.String(255), nullable=True)
+    
+    status = db.Column(db.String(30), nullable=False, default='Orçamento aguardando aprovação')
+    
+    cliente = db.relationship('Pessoa', backref='orcamentos')
+    produto = db.relationship('Produto', backref='orcamentos')
