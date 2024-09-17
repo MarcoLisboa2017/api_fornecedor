@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models import db, Produto, Estoque
-from product_schemas import ProdutoSchema, EstoqueSchema
+from schemas.product_schemas import ProdutoSchema, EstoqueSchema
 from marshmallow import ValidationError
 
 product_bp = Blueprint('product_bp', __name__)

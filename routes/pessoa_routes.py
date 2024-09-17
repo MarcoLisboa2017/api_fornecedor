@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models import db, Pessoa
-from schemas import PessoaSchema
+from schemas.pessoas_schemas import PessoaSchema
 from marshmallow import ValidationError
 
 pessoa_bp = Blueprint('pessoa_bp', __name__)

@@ -2,9 +2,9 @@ from flask import Flask
 from models import db
 from config import Config
 from flask_migrate import Migrate
-from pessoa_routes import pessoa_bp  # Importa as rotas de pessoa (cliente e fornecedor)
-from product_routes import product_bp  # Importa as rotas de produto
-from orcamento_routes import orcamento_bp
+from routes.pessoa_routes import pessoa_bp  # Importa as rotas de pessoa (cliente e fornecedor)
+from routes.product_routes import product_bp  # Importa as rotas de produto
+from routes.orcamento_routes import orcamento_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)

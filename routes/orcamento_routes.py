@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models import db, Orcamento, Produto, Pessoa
-from orcamento_schemas import OrcamentoSchema
+from schemas.orcamento_schemas import OrcamentoSchema
 from datetime import date, timedelta
 from sqlalchemy.exc import IntegrityError
 
