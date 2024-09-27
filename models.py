@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy()
 
 class Tipo(db.Model):
@@ -80,3 +81,86 @@ class Contato(db.Model):
     observacao = db.Column(db.Text)
     pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'), nullable=False)
 
+
+# Adicionando os modelos de Produto e Estoque
+class Produto(db.Model):
+    __tablename__ = 'produtos'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    codigo_produto = db.Column(db.String(50), nullable=False, unique=True)
+    marca = db.Column(db.String(50), nullable=False)
+    unidade = db.Column(db.String(10), nullable=False)
+    codigo_gtin = db.Column(db.String(50))
+    ncm = db.Column(db.String(20))
+    valor_venda = db.Column(db.Float, nullable=False)
+    valor_custo = db.Column(db.Float, nullable=False)
+    peso_bruto = db.Column(db.Float, nullable=False)
+    peso_liquido = db.Column(db.Float, nullable=False)
+    tamanho_produto = db.Column(db.String(50))
+    origem_produto = db.Column(db.String(50))
+    numero_ordem = db.Column(db.String(50))
+    tipo_classificacao = db.Column(db.String(50))
+    situacao = db.Column(db.String(10), nullable=False)  # Ativo/Inativo
+    tipo = db.Column(db.String(50))
+    eh_kit = db.Column(db.Boolean, default=False)  # Produto é um kit?
+    fornecedor_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))  # Relacionamento com fornecedor
+    codigo_barras_interno = db.Column(db.String(50))
+    aliquota_icms = db.Column(db.Float)
+    aliquota_ipi = db.Column(db.Float)
+    aliquota_pis = db.Column(db.Float)
+    aliquota_cofins = db.Column(db.Float)
+    unidade_tributavel = db.Column(db.String(10))
+    codigo_beneficio_fiscal = db.Column(db.String(50))
+    codigo_cest = db.Column(db.String(50))
+    tributarias_federal = db.Column(db.String(50))
+    tributarias_estadual = db.Column(db.String(50))
+    parametros_nfe = db.Column(db.Boolean, default=False)
+    parametros_nfce = db.Column(db.Boolean, default=False)
+    observacoes = db.Column(db.Text)
+
+    # Relacionamento com estoque
+    estoque = db.relationship('Estoque', back_populates='produto', uselist=False)
+
+class Estoque(db.Model):
+    __tablename__ = 'estoques'
+
+    id = db.Column(db.Integer, primary_key=True)
+    localizacao = db.Column(db.String(100), nullable=False)
+    estoque_inicial = db.Column(db.Float, nullable=False)
+    estoque_minimo = db.Column(db.Float, nullable=False)
+    estoque_maximo = db.Column(db.Float, nullable=False)
+    estoque_atual = db.Column(db.Float, nullable=False) 
+
+    produto_id = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable=False)
+    produto = db.relationship('Produto', back_populates='estoque')
+
+class Orcamento(db.Model):
+    __tablename__ = 'orcamentos'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    pessoas_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'), nullable=False)  # Relaciona com a tabela Pessoa
+    vendedor = db.Column(db.String(100), nullable=False)
+    numero_orcamento = db.Column(db.Integer, nullable=False, unique=True)
+    produtos_id = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable=False)
+    quantidade = db.Column(db.Integer, nullable=False)
+    valor_ipi = db.Column(db.Float, nullable=False)
+    valor_icms = db.Column(db.Float, nullable=False)
+    valor_unitario = db.Column(db.Float, nullable=False)
+    valor_total = db.Column(db.Float, nullable=False)
+    valor_frete = db.Column(db.Float, nullable=True)
+    valor_desconto = db.Column(db.Float, nullable=True)
+    preco_bruto = db.Column(db.Float, nullable=False)
+    preco_liquido = db.Column(db.Float, nullable=False)
+    modalidade_frete = db.Column(db.String(50), nullable=False)  # Rodoviario, Aereo, Maritimo
+    transportadora = db.Column(db.String(100), nullable=True)
+    data_orcamento = db.Column(db.Date, nullable=False)
+    prazo_entrega = db.Column(db.String(50), nullable=False)
+    validade = db.Column(db.Date, nullable=True)
+    observacoes = db.Column(db.Text, nullable=True)
+    anexo = db.Column(db.String(255), nullable=True)
+    
+    status = db.Column(db.String(30), nullable=False, default='Orçamento aguardando aprovação')
+    
+    cliente = db.relationship('Pessoa', backref='orcamentos')
+    produto = db.relationship('Produto', backref='orcamentos')
